@@ -53,10 +53,14 @@ public class hw02{
 	}
 
 
-    public void movementBall(){ // collision detection for the ball | we can also check in this method kung may nanalo na ba o wala.
-        if( (cx - rad) < (p1x + rw -5)){ //lacks getting the surface of the rectangle 
+    public void movementBall(){ 
+        // collision detection for the ball | we can also check in this method kung may nanalo na ba o wala.
+        if( (cx - rad) < (p1x + rw - 5) && ((cy+rad) <= (p1y + rh) || (cy - rad) >= p1y) ){ 
             System.out.println("Circle X: " + (cx - rad));
             System.out.println("Rectangle X: " + (p1x + rw));
+            System.out.println("Rectangle Y: " + (p1y + rh) );
+            System.out.println("Rectangle Y: " + (p1y) );
+            System.out.println("Circle Y: " + (cy));
             vx *= -1;
         }
         else if((cx + rad) > (p2x)){
