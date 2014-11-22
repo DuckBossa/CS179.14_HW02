@@ -6,19 +6,22 @@ import java.awt.geom.*;
 import java.awt.EventQueue;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+
 public class hw02{
-	JFrame frame;
-    mainCanvas canvas;
-	int length;
-	int width;
-	int p1x, p1y, p2x, p2y;
-    int rad,cx,cy;
-	int rw, rh;
-    boolean win;
+	private JFrame frame;
+    private mainCanvas canvas;
+	private int length;
+	private int width;
+	private int p1x, p1y, p2x, p2y;
+    private int rad,cx,cy;
+	private int rw, rh;
+    private double vx, vy;
+    private boolean win;
+    private Thread clock;
         
 	public hw02(){
 		length = 640;
-		width = 480;
+		width = 280;
 		rw = 15;
 		rh = 50;
         rad = 10;
@@ -27,15 +30,18 @@ public class hw02{
         p1x = 10; p1y = 0; 
     	p2x = 610; p2y = 0;
         win = false;
+        vx = 2.0;
+        vy = 0;
+        clock = new Thread(new runner());
 	}
 	
 	public static void main(String args[]){
 		hw02 wat = new hw02();
-		wat.setupGraphics();
-                
+        wat.setupGraphics();
+        wat.letTheGamesBegin();
 	}
 	
-	void setupGraphics(){
+	public void setupGraphics(){
 		frame = new mainFrame();
         frame.addKeyListener(new kl());
 		frame.setVisible(true);
@@ -44,41 +50,17 @@ public class hw02{
 		frame.add(canvas);
 	}
 
-    class kl implements KeyListener{
 
-        @Override
-        public void keyTyped(KeyEvent e) {
-        }
-        @Override
-        public void keyPressed(KeyEvent e) {
-        }
-        @Override
-        public void keyReleased(KeyEvent e) {
-            switch(e.getKeyChar()){
-                case 'w':
-                    p1y -= 10;
-                    canvas.repaint();
-                    System.out.println("p1 up");
-                    break;
-                case 's':
-                    p1y += 10;
-                    canvas.repaint();
-                    System.out.println("p1 down");
-                    break;
-                case 'o':
-                    p2y += 10;
-                    canvas.repaint();
-                    System.out.println("p2 up");
-                    break;
-                case 'l':
-                    p2y -= 10;
-                    canvas.repaint();
-                    System.out.println("p2 down");
-                    break;
-            };
-        }
-
+    public void movementBall(){ // collision detection for the ball
+        cx += vx;
+        cy += vy;
+        System.out.println(cx);
     }
+
+    public void letTheGamesBegin(){
+        clock.start();
+    }
+
 	class mainFrame extends JFrame{
 		public mainFrame(){
 			setTitle("HW02");
@@ -100,13 +82,62 @@ public class hw02{
 					   g2.fillRect(p2x,p2y,rw,rh);
                        g2.setColor((Color.RED));
                        g2.fillOval(cx, cy, rad, rad);
-
 		}
+	}
 
-        void start(){
-            while(true){
-                repaint();
+    class runner implements Runnable{
+        public void run(){
+            while(!win){
+            try{
+            Thread.sleep(50);
+            }
+            catch(InterruptedException ie){
+            ie.printStackTrace();
+            }
+            movementBall();
+            canvas.repaint();
             }
         }
-	}
+    }
+
+
+    class kl implements KeyListener{
+        @Override
+        public void keyTyped(KeyEvent e) {
+        }
+        @Override
+        public void keyPressed(KeyEvent e) {
+        }
+        @Override
+        public void keyReleased(KeyEvent e) {
+            switch(e.getKeyChar()){
+                case 'w':
+                    if(p1y <= 0){}
+                    else
+                    p1y -= 10;                        
+                    canvas.repaint();
+                    break;
+                case 's':
+                    if(p1y >= width - 70){}
+                    else
+                    p1y += 10;
+                    canvas.repaint();
+                    break;
+                case 'o':
+                    if(p2y <= 0){}
+                    else
+                    p2y -= 10;
+                    canvas.repaint();
+                    break;
+                case 'l':
+                    if(p2y >= width - 70){}
+                    else
+                    p2y += 10;
+                    canvas.repaint();
+                    break;
+            };
+        }
+    }
+
+
 }
