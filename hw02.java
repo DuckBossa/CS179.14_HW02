@@ -17,9 +17,11 @@ public class hw02{
 	private int rw, rh;
     private double vx, vy;
     private boolean win;
+    private String playerMovement;
     private Thread clock;
-        
+    private Rectangle p1,p2;  
 	public hw02(){
+        playerMovement = "";
 		length = 640;
 		width = 280;
 		rw = 15;
@@ -51,10 +53,18 @@ public class hw02{
 	}
 
 
-    public void movementBall(){ // collision detection for the ball
-        cx += vx;
-        cy += vy;
-        System.out.println(cx);
+    public void movementBall(){ // collision detection for the ball | we can also check in this method kung may nanalo na ba o wala.
+        if( (cx - rad) < (p1x + rw -5)){ //lacks getting the surface of the rectangle 
+            System.out.println("Circle X: " + (cx - rad));
+            System.out.println("Rectangle X: " + (p1x + rw));
+            vx *= -1;
+        }
+        else if((cx + rad) > (p2x)){
+            System.out.println("Circle X: " + (cx + rad));
+            System.out.println("Rectangle X: " + p2x);
+            vx *= -1;
+        }
+        cx -= vx;
     }
 
     public void letTheGamesBegin(){
