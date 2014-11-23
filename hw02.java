@@ -27,13 +27,13 @@ public class hw02{
 		rw = 15;
 		rh = 50;
         rad = 10;
-        cx = 100;
+        cx = length/2;
         cy = 100;
         p1x = 10; p1y = 0; 
     	p2x = 610; p2y = 0;
         win = false;
-        vx = 2.0;
-        vy = 0;
+        vx = 5.0;
+        vy = 5.0;
         clock = new Thread(new runner());
 	}
 	
@@ -54,22 +54,24 @@ public class hw02{
 
     public void movementBall(){ 
         // collision detection for the ball | we can also check in this method kung may nanalo na ba o wala.
-        if( (cx - rad) < (p1x + rw) && ((cy+rad) <= (p1y + rh) && (cy - rad) >= p1y) ){ // this method not working! D:
-            System.out.println("Circle X: " + (cx - rad));
-            System.out.println("Circle Y: " + (cy));
-            System.out.println("Rectangle X: " + (p1x + rw));
-            System.out.println("Rectangle Y: " + (p1y + rh) );
-            System.out.println("Rectangle Y: " + (p1y));
+        if(cx - rad < -10){
+            System.out.println("Player 2 wins!");
+            win = true;
+        }
+        else if(cx + rad > length + 10){
+            win = true;
+            System.out.println("PLayer 1 wins!");
+        }
+        else if((cy + rad*3>= width) || (cy) <= 0 ){
+            vy *=-1;
+        }
+        else if( (cx - rad + 10) <= (p1x + rw) && ((cy+rad) <= (p1y + rh) && (cy - rad) >= p1y) ){ // this method not working! D:
             vx *= -1;
         }
-        else if(((cx + rad) > (p2x)) && ((cy + rad) <= (p2y + rh) && (cy - rad) >= p2y)){
-            System.out.println("Circle X: " + (cx + rad));
-            System.out.println("Circle Y: " + (cy));
-            System.out.println("Rectangle X: " + p2x);
-            System.out.println("Rectangle Y: " + p2y);
-            System.out.println("Rectangle Y: " + (p2y + rh));
+        else if(((cx + rad) >= (p2x)) && ((cy + rad) <= (p2y + rh) && (cy - rad) >= p2y)){
             vx *= -1;
         }
+        cy -= vy;
         cx -= vx;
     }
 
@@ -105,7 +107,7 @@ public class hw02{
         public void run(){
             while(!win){
             try{
-            Thread.sleep(30);
+            Thread.sleep(80);
             }
             catch(InterruptedException ie){
             ie.printStackTrace();
