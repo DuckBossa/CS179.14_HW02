@@ -85,7 +85,7 @@ public class Pong{
             System.out.println("PLayer 1 wins!");
         	win = true;
         }
-        else if((ball.y + ball.w*3 >= height - 10) || (ball.y) <= 0 ){ // edges of board
+        else if((ball.y + ball.w*3 >= height) || (ball.y) <= 0 ){ // edges of board
         	ball.vy *=-1;
         }
         else if((ball.x - ball.w + 10) <= (p1.x + p1.w) && ((ball.y+ball.w) <= (p1.y + p1.h) && (ball.y - ball.w) >= p1.y)){ // hits surface of p1
@@ -109,10 +109,12 @@ public class Pong{
         	p2.vy = -1;
         }
 		
-		p1.y += p1.vy;
-		p1.x += p1.vx;
-		p2.y += p2.vy;
-		p2.x += p2.vx;
+			p1.y += p1.vy;
+			p1.x += p1.vx;
+        	p2.y += p2.vy;
+        	p2.x += p2.vx;
+        
+
         ball.x += ball.vx;
         ball.y += ball.vy; 
 
