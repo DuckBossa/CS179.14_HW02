@@ -15,6 +15,8 @@ public class Pong{
 	PlayCanvas canvas;
 	GameObject p1, p2, ball;
 	
+	boolean[] keys;
+	
 	public Pong(){
 		debug = true;
 	
@@ -23,16 +25,18 @@ public class Pong{
 		height = 280;
 		win = false;
 		
-		p1 = new GameObject(15, 50);
-		p2 = new GameObject(15, 50);
-		ball = new GameObject(10, 10);
-		ball.vx = 5.0;
-		ball.vy = -3.0;
+		p1 = new GameObject(15, 50, 5);
+		p2 = new GameObject(15, 50, 5);
+		ball = new GameObject(10, 10, 0);
+		ball.vx = 1.0;
+		ball.vy = -1.0;
+		keys = new boolean[4];
+		
         p1.x = 10; 			p1.y = height/2;
 		p2.x = 610; 		p2.y = height/2;
         ball.x = width/2; 	ball.y = 100;
 		
-		root = new RootPane(width, height, keyString, p1, p2, ball);
+		root = new RootPane(width, height, keys, p1, p2, ball);
 	}
 	
 	public static void main(String args[]){
@@ -40,7 +44,7 @@ public class Pong{
 		p.start();
 		while(!p.win){
 			try{
-            Thread.sleep(80);
+            Thread.sleep(16);
 			p.loop();
             }
             catch(InterruptedException ie){
@@ -55,23 +59,21 @@ public class Pong{
 	
 	void processKeys(){
 		
-		if(debug) System.out.println("Keys Pressed: " + keyString.toString());
-		if(keyString.indexOf("w") != -1){
-			p1.vy = -1;
-		}else if(keyString.indexOf("s") != -1){
-			p1.vy = 1;
+		//if(debug) System.out.println("Keys Pressed: " + keyString.toString());
+		if(keys[0]){
+			p1.vy = -p1.spd;
+		}else if(keys[1]){
+			p1.vy = p1.spd;
 		}else{
 			p1.vy = 0;
 		}
-		if(keyString.indexOf("i") != -1){
-			p2.vy = -1;
-		}else if(keyString.indexOf("k") != -1){
-			p2.vy = 1;
+		if(keys[2]){
+			p2.vy = -p2.spd;
+		}else if(keys[3]){
+			p2.vy = p2.spd;
 		}else{
 			p2.vy = 0;
 		}
-		keyString.setLength(0);
-		keyString.trimToSize();
 	}
 	
 	void doPhysics(){
@@ -81,8 +83,8 @@ public class Pong{
             win = true;
         }
         else if(ball.x + ball.w > width + 10){
-        	win = true;
             System.out.println("PLayer 1 wins!");
+        	win = true;
         }
         else if((ball.y + ball.w*3>= height) || (ball.y) <= 0 ){
         	ball.vy *=-1;
@@ -94,17 +96,16 @@ public class Pong{
         	ball.vx *=-1;
         }
 
-        /*
+       
 		p1.x += p1.vx;
 		p1.y += p1.vy;
 		p2.x += p2.vx;
 		p2.y += p2.vy;
 		ball.x += ball.vx;
 		ball.y += ball.vy;
-		*/
-
-		ball.x += ball.vx;
-		ball.y += ball.vy;
+		
+		//ball.x += ball.vx;
+		//ball.y += ball.vy;
 		if(debug)System.out.println("Player 1 : " + p1.x + " " + p1.y + "\nPlayer 2: " + p2.x + " " + p2.y +  "\nBall: " + ball.x + " " + ball.y);
 	}
 	
@@ -124,26 +125,28 @@ class GameObject{
 	int x, y;
 	double vx, vy;
 	int w, h;
-	public GameObject(int w, int h){
+	double spd;
+	public GameObject(int w, int h, double spd){
 		x = 0;
 		y = 0;
 		vx = 0;
 		vy = 0;
 		this.w = w;
 		this.h = h;
+		this.spd = spd;
 	}
 }
 
 class RootPane extends JFrame{
 	PlayCanvas canvas;
-	StringBuilder keyString;
-	public RootPane(int w, int h, StringBuilder ky, GameObject a, GameObject b, GameObject c){
+	boolean[] keys;
+	public RootPane(int w, int h, boolean[] keys, GameObject a, GameObject b, GameObject c){
 		setTitle("HW02");
 		setSize(w,h);
 		setResizable(false);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		
-		keyString = ky;	
+		this.keys = keys;	
 		canvas = new PlayCanvas(w, h, a, b, c);
 	}
 	
@@ -167,20 +170,33 @@ class RootPane extends JFrame{
 		public void keyPressed(KeyEvent e) {
 			char x = e.getKeyChar();
 			if(x == 'w'){
-				keyString.append('w');
+				keys[0] = true;
 			}
 			if(x == 's'){
-				keyString.append('s');
+				keys[1] = true;
 			}
 			if(x == 'i'){
-				keyString.append('i');
+				keys[2] = true;
 			}
 			if(x == 'k'){
-				keyString.append('k');
+				keys[3] = true;
 			}
 		}
 		@Override
 		public void keyReleased(KeyEvent e) {
+			char x = e.getKeyChar();
+			if(x == 'w'){
+				keys[0] = false;
+			}
+			if(x == 's'){
+				keys[1] = false;
+			}
+			if(x == 'i'){
+				keys[2] = false;
+			}
+			if(x == 'k'){
+				keys[3] = false;
+			}
 		}
 	}
 }
