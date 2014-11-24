@@ -56,9 +56,9 @@ public class Pong{
 		
 		if(debug) System.out.println("Keys Pressed: " + keyString.toString());
 		if(keyString.indexOf("w") != -1){
-			p1.vy = 1;
-		}else if(keyString.indexOf("s") != -1){
 			p1.vy = -1;
+		}else if(keyString.indexOf("s") != -1){
+			p1.vy = 1;
 		}else{
 			p1.vy = 0;
 		}
@@ -176,7 +176,8 @@ class PlayCanvas extends Canvas{
 	
 	public void paint(Graphics g){
 		Graphics2D g2 = (Graphics2D) g;
-		
+		g2.setColor(Color.WHITE);
+		g2.fillRect(0,0,getWidth(),getHeight());
 		g2.setPaint(new Color(200,200,200));
 		g2.fillRect(p1.x,p1.y,p1.w,p1.h);
 		g2.fillRect(p2.x,p2.y,p2.w,p2.h);
