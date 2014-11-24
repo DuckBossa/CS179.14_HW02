@@ -58,7 +58,6 @@ public class Pong{
 	}
 	
 	void processKeys(){
-		
 		//if(debug) System.out.println("Keys Pressed: " + keyString.toString());
 		if(keys[0]){
 			p1.vy = -p1.spd;
@@ -78,35 +77,51 @@ public class Pong{
 	
 	void doPhysics(){
 
-		if(ball.x - ball.w < -10){
+		if(ball.x - ball.w < -10){ // win condition
             System.out.println("Player 2 wins!");
             win = true;
         }
-        else if(ball.x + ball.w > width + 10){
+        else if(ball.x + ball.w > width + 10){ //win condition
             System.out.println("PLayer 1 wins!");
         	win = true;
         }
-        else if((ball.y + ball.w*3>= height) || (ball.y) <= 0 ){
+        else if((ball.y + ball.w*3 >= height) || (ball.y) <= 0 ){ // edges of board
         	ball.vy *=-1;
         }
-        else if((ball.x - ball.w + 10) <= (p1.x + p1.w) && ((ball.y+ball.w) <= (p1.y + p1.h) && (ball.y - ball.w) >= p1.y)){
+        else if((ball.x - ball.w + 10) <= (p1.x + p1.w) && ((ball.y+ball.w) <= (p1.y + p1.h) && (ball.y - ball.w) >= p1.y)){ // hits surface of p1
         	ball.vx *=-1;
         }
-        else if(((ball.x + ball.w) >= (p2.x)) && ((ball.y + ball.w) <= (p2.y + p2.h) && (ball.y - ball.w) >= p2.y)){
+        else if(((ball.x + ball.w) >= (p2.x)) && ((ball.y + ball.w) <= (p2.y + p2.h) && (ball.y - ball.w) >= p2.y)){ // hits surface of p2
         	ball.vx *=-1;
+        }  
+
+        if(p1.y < 0 ){
+        	p1.y = 0;
+        }
+        else if(p1.y > height - p1.h - 30){
+        	p1.y = height - p1.h - 30;
+        	System.out.println(("Condition1: " + (height - p1.h - 30)));
+        }
+        else{
+        	p1.y += p1.vy;
+        	p1.x += p1.vx;
+        }
+        if(p2.y < 0 ){
+        	p2.y = 0;
+        }
+        else if(p2.y > height - p2.h - 30){
+        	p2.y = height - p2.h - 30;
+        	System.out.println(("Condition2: " + (height - p1.h - 30)));
+        }
+        else{
+        	p2.y += p2.vy;
+        	p2.x += p2.vx;
         }
 
-       
-		p1.x += p1.vx;
-		p1.y += p1.vy;
-		p2.x += p2.vx;
-		p2.y += p2.vy;
-		ball.x += ball.vx;
-		ball.y += ball.vy;
-		
-		//ball.x += ball.vx;
-		//ball.y += ball.vy;
-		if(debug)System.out.println("Player 1 : " + p1.x + " " + p1.y + "\nPlayer 2: " + p2.x + " " + p2.y +  "\nBall: " + ball.x + " " + ball.y);
+        ball.x += ball.vx;
+        ball.y += ball.vy; 
+
+		//if(debug)System.out.println("Player 1 : " + p1.x + " " + p1.y + "\nPlayer 2: " + p2.x + " " + p2.y +  "\nBall: " + ball.x + " " + ball.y);
 	}
 	
 	void updateGraphics(){
