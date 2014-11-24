@@ -26,7 +26,8 @@ public class Pong{
 		p1 = new GameObject(15, 50);
 		p2 = new GameObject(15, 50);
 		ball = new GameObject(10, 10);
-		
+		ball.vx = 5.0;
+		ball.vy = -3.0;
         p1.x = 10; 			p1.y = height/2;
 		p2.x = 610; 		p2.y = height/2;
         ball.x = width/2; 	ball.y = 100;
@@ -74,10 +75,34 @@ public class Pong{
 	}
 	
 	void doPhysics(){
+
+		if(ball.x - ball.w < -10){
+            System.out.println("Player 2 wins!");
+            win = true;
+        }
+        else if(ball.x + ball.w > width + 10){
+        	win = true;
+            System.out.println("PLayer 1 wins!");
+        }
+        else if((ball.y + ball.w*3>= height) || (ball.y) <= 0 ){
+        	ball.vy *=-1;
+        }
+        else if((ball.x - ball.w + 10) <= (p1.x + p1.w) && ((ball.y+ball.w) <= (p1.y + p1.h) && (ball.y - ball.w) >= p1.y)){
+        	ball.vx *=-1;
+        }
+        else if(((ball.x + ball.w) >= (p2.x)) && ((ball.y + ball.w) <= (p2.y + p2.h) && (ball.y - ball.w) >= p2.y)){
+        	ball.vx *=-1;
+        }
+
+        /*
 		p1.x += p1.vx;
 		p1.y += p1.vy;
 		p2.x += p2.vx;
 		p2.y += p2.vy;
+		ball.x += ball.vx;
+		ball.y += ball.vy;
+		*/
+
 		ball.x += ball.vx;
 		ball.y += ball.vy;
 		if(debug)System.out.println("Player 1 : " + p1.x + " " + p1.y + "\nPlayer 2: " + p2.x + " " + p2.y +  "\nBall: " + ball.x + " " + ball.y);
