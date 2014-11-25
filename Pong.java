@@ -28,12 +28,12 @@ public class Pong{
 		p1 = new GameObject(15, 50, 5);
 		p2 = new GameObject(15, 50, 5);
 		ball = new GameObject(10, 10, 0);
-		ball.vx = 2.0;
-		ball.vy = -2.0;
+		ball.vx = 3.0;
+		ball.vy = -3.0;
 		keys = new boolean[4];
 		
-        p1.x = 10; 			p1.y = height/2;
-		p2.x = 610; 		p2.y = height/2;
+        p1.x = 20; 			p1.y = height/2;
+		p2.x = 600; 		p2.y = height/2;
         ball.x = width/2; 	ball.y = 100;
 		
 		root = new RootPane(width, height, keys, p1, p2, ball);
@@ -77,39 +77,51 @@ public class Pong{
 	
 	void doPhysics(){
 
-		if(ball.x - ball.w < -10){ // win condition for p2
+		if(ball.x - ball.w < 0){ // win condition for p2
             System.out.println("Player 2 wins!");
             win = true;
         }
-        else if(ball.x + ball.w > width + 10){ //win condition for p1
+        else if(ball.x + ball.w > width - 15){ //win condition for p1
             System.out.println("PLayer 1 wins!");
         	win = true;
         }
-        else if((ball.y + ball.w*3 >= height) || (ball.y) <= 0 ){ // edges of board
+        else if((ball.y + ball.w *2  >= height - 15  ) || (ball.y) <= 0 ){ // edges of board
         	ball.vy *=-1;
         }
         else if((ball.x - ball.w + 10) <= (p1.x + p1.w) && ((ball.y+ball.w) <= (p1.y + p1.h) && (ball.y - ball.w) >= p1.y)){ // hits surface of p1
-        	ball.vx *=-1;
-        	System.out.println("Surface p1");
-        } /*
-        else if( (ball.y + ball.w >= p1.y) && (ball.y - ball.w <= p1.y) && (ball.x - ball.w + 10 >= p1.x) && (ball.x - ball.w + 10 <= p1.x + p1.w) ){//hits edges of p1
-        	if( (ball.vy > 0 && ball.y < p1.y) || (ball.vy < 0 && ball.y > p1.y) ){
-        	ball.vy *=-1;
+        	if(ball.vx < 0)
+        		ball.vx *=-1;
+        }
+        else if((ball.x - ball.w + 10 >= p1.x) && (ball.x + ball.w <= p1.x + p1.w) && (ball.y + ball.w >= p1.y) && (ball.y + ball.w < p1.y + p1.h)){//hits edge top p1
+        	if(ball.vy > 0){
+        		ball.vy*= -1;
         	}
-        	ball.vx *=-1;
-        	System.out.println("Edge p1 Top");
-        } */
+        	if(ball.vx < 0)
+        		ball.vx *=-1;
+        }
+        else if((ball.x - ball.w + 10 >= p1.x) && (ball.x + ball.w <= p1.x + p1.w) && (ball.y - ball.w <= p1.y + p1.h) && (ball.y - ball.w >= p1.y) ){//hits edge bottom p1
+        	if(ball.vy < 0)
+        		ball.vy*= -1;
+        	if(ball.vx < 0)
+        		ball.vx *=-1;
+        }
         else if(((ball.x + ball.w) >= (p2.x)) && ((ball.y + ball.w) <= (p2.y + p2.h) && (ball.y - ball.w) >= p2.y)){ // hits surface of p2
-        	ball.vx *=-1;
-        	System.out.println("Surface p2");
-        }/*
-        else if( (ball.y + ball.w >= p2.y) && (ball.x + ball.w >= p2.x) && (ball.x + ball.w + 10 <= p2.x + p2.w) ){//hits edges of p2
-        	if( (ball.vy > 0 && ball.y < p2.y) || (ball.vy < 0 && ball.y > p2.y) ){ // not yet done
-        	ball.vy *=-1;
+        	if(ball.vx > 0)
+        		ball.vx *=-1;
+        }
+        else if((ball.x + ball.w <= p2.x + p2.w) && (ball.x + ball.w >= p2.x) && (ball.y + ball.w >= p2.y) && (ball.y + ball.w < p2.y + p2.h)){//hits edge top p2
+        	if(ball.vy > 0){
+        		ball.vy*= -1;
         	}
-        	ball.vx *=-1;
-        	System.out.println("Edge p2");
-        }*/
+        	if(ball.vx > 0)
+        		ball.vx *=-1;
+        }
+        else if((ball.x + ball.w <= p2.x + p2.w) && (ball.x + ball.w >= p2.x) && (ball.y - ball.w <= p2.y + p2.h) && (ball.y - ball.w >= p2.y) ){//hits edge bottom p2
+        	if(ball.vy < 0)
+        		ball.vy*= -1;
+        	if(ball.vx > 0)
+        		ball.vx *=-1;
+        }
 
         if(p1.y <= 0){
         	p1.vy = 1;
